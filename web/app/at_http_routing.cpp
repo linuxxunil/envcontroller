@@ -38,8 +38,10 @@ void AtHttpRouting::service(HttpRequest& request, HttpResponse& response)
     } else if (path.startsWith("/assets")) {
         redirect(request,response);
     } else if (isLogin(request, response)){
-        qDebug() << "BBBBBBBBBBB";
-        if ( path.startsWith("/system") ) {
+        qDebug() << "DDDDD";
+        if ( path == "/" ) {
+           redirect("/dashboard.html",response);
+        } else if ( path.startsWith("/system") ) {
             AtServiceSystem().service(request, response);
         } else if ( path.startsWith("/interface") ) {
             AtServiceInterface().service(request, response);
@@ -50,10 +52,6 @@ void AtHttpRouting::service(HttpRequest& request, HttpResponse& response)
             response.write(msg.toLatin1(),true);
         }
     } else {
-        //msg = AtResponseCode::MSG_UNLOGIN;
-        //response.write(msg.toLatin1(),true);
-        qDebug() << "DDDDDDDDDDDD";
-        //redirect(request,response);
         redirectRootIndex(response); //redirect index.html
     }
 
@@ -108,6 +106,12 @@ void AtHttpRouting::redirect(HttpRequest &request, HttpResponse &response)
 {
     AtWebThread *app = AtWebThread::getInstance();
     app->staticFileController->service(request, response);
+}
+
+void AtHttpRouting::redirect(QString path, HttpResponse &response)
+{
+    AtWebThread *app = AtWebThread::getInstance();
+    app->staticFileController->service(path.toLatin1(), response);
 }
 
 void AtHttpRouting::redirectRootIndex(HttpResponse &response)

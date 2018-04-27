@@ -35,6 +35,7 @@ public:
     void service(HttpRequest& request, HttpResponse& response);
     bool isLogin(HttpRequest& request, HttpResponse& response);
     void redirect(HttpRequest& request, HttpResponse& response);
+    void redirect(QString path, HttpResponse& response);
     void redirectRootIndex(HttpResponse& response);
 
 };
